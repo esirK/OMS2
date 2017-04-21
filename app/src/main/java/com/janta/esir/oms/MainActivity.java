@@ -1,5 +1,10 @@
 package com.janta.esir.oms;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -8,7 +13,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.janta.esir.oms.fragments.AboutUsFragment;
 import com.janta.esir.oms.fragments.BrekoFragment;
 import com.janta.esir.oms.fragments.HelpFragment;
@@ -17,6 +28,8 @@ import com.janta.esir.oms.fragments.ProfileFragment;
 import com.janta.esir.oms.fragments.SettingsFragment;
 import com.janta.esir.oms.fragments.TabsFragment;
 import com.janta.esir.oms.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
     DrawerLayout mDrawerLayout;
@@ -34,6 +47,32 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         mNavigationView = (NavigationView) findViewById(R.id.personal_nav);
+
+        /**
+        * Set Up The header_nav
+        * */
+        View hView=mNavigationView.inflateHeaderView(R.layout.header_nav_content);
+        final RelativeLayout relativeLayout=(RelativeLayout)hView.findViewById(R.id.header);
+        CircleImageView profile_pic=(CircleImageView)hView.findViewById(R.id.profile_pic);
+        TextView profile_name=(TextView)hView.findViewById(R.id.profile_name);
+        TextView profile_mail=(TextView)hView.findViewById(R.id.profile_email);
+
+        Glide.with(this).load(R.drawable.esir).asBitmap().placeholder(R.drawable.rice).into(new SimpleTarget<Bitmap>() {
+            @Override
+            public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                Drawable drawable = new BitmapDrawable(resource);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    relativeLayout.setBackground(drawable);
+                }
+            }
+        });
+
+//        Glide.with(this).load(R.drawable.esir).asBitmap().into(profile_pic);
+//        profile_pic.setImageResource(R.drawable.njunge);
+        Glide.with(this).load(R.drawable.esir).asBitmap().into(profile_pic);
+        profile_name.setText("Esir Kings Waitina");
+        profile_mail.setText("esirkings@gmail.com");
+
         /**
          * inflate the very first fragment
          * The TabFragment as the first Fragment
@@ -52,9 +91,16 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 mDrawerLayout.closeDrawers();
 
+                if (menuItem.getItemId() == R.id.home) {
+                    Intent restartMe=new Intent(getApplicationContext(),MainActivity.class);
+                    restartMe.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(restartMe);
+                    finish();
+                }
+
                 if (menuItem.getItemId() == R.id.profile) {
                     FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-                    fragmentTransaction.replace(R.id.containerView,new BrekoFragment()).commit();
+                    fragmentTransaction.replace(R.id.containerView,new ProfileFragment()).commit();
 
                 }
 
