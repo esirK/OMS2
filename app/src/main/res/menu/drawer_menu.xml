@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+    android:title="Profile"
+    android:id="@+id/profile"
+    />
+    <item
+        android:title="Orders"
+        android:id="@+id/orders"
+        />
+    <group android:id="@+id/group_settings_id">
+
+        <item
+            android:title="Settings"
+            android:id="@+id/settings"
+            />
+        <item
+            android:title="Help"
+            android:id="@+id/help"
+            />
+
+        <item
+            android:title="About Us"
+            android:id="@+id/about_us"
+            />
+    </group>
+</menu>
